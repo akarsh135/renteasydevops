@@ -23,7 +23,7 @@ services:
       MYSQL_USER: akarsh
       MYSQL_PASSWORD: akarsh
     ports:
-      - "3310:3310"
+      - "3312:3312"
     volumes:
       - ./database:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
