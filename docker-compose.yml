@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  www:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8008:80"
+    volumes:
+      - ./www:/var/www/html
+    depends_on:
+      - db-1
+    networks:
+      - newrent_network
+
+  db-1:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: akarsh
+      MYSQL_DATABASE: newrent
+      MYSQL_USER: akarsh
+      MYSQL_PASSWORD: akarsh
+    ports:
+      - "3310:3310"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+    networks:
+      - newrent_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "84:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: akarsh
+      MYSQL_USER: akarsh
+      MYSQL_PASSWORD: akarsh
+      PMA_HOST: db-1  # Add this line to specify the MySQL hostname
+    networks:
+      - newrent_network
+    depends_on:
+      - db-1
+
+networks:
+  newrent_network:
+
+volumes:
+  db_data:
